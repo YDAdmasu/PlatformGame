@@ -79,7 +79,6 @@ body {
 }
 
 #audio-controls input[type=range] {
-  -webkit-appearance: none;
   width: 100px;
   height: 8px;
   background: #444;

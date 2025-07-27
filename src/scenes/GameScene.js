@@ -12,16 +12,16 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('sky', 'assets/images/sky.png');
-    this.load.image('ground', 'assets/images/theplatform.png');
-    this.load.image('star', 'assets/images/star.png');
-    this.load.image('particle', 'assets/particles/particle.png');
-    this.load.spritesheet('dude', 'assets/spritesheets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    this.load.spritesheet('enemy', 'assets/spritesheets/enemy.png', { frameWidth: 32, frameHeight: 48 });
-    this.load.audio('bgMusic', 'assets/audio/bg-music.wav');
-    this.load.audio('jump', 'assets/audio/jump.wav');
-    this.load.audio('coin', 'assets/audio/coin.wav');
-    this.load.audio('hit', 'assets/audio/enemyHitSounds.wav');
+    this.load.image('sky', 'public/assets/images/sky.png');
+    this.load.image('ground', 'public/assets/images/theplatform.png');
+    this.load.image('star', 'public/assets/images/star.png');
+    this.load.image('particle', 'public/assets/particles/particle.png');
+    this.load.spritesheet('dude', 'public/assets/spritesheets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.spritesheet('enemy', 'public/assets/spritesheets/enemy.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.audio('bgMusic', 'public/assets/audio/bg-music.wav');
+    this.load.audio('jump', 'public/assets/audio/jump.wav');
+    this.load.audio('coin', 'public/assets/audio/coin.wav');
+    this.load.audio('hit', 'public/assets/audio/enemyHitSounds.wav');
   }
 
   create() {
