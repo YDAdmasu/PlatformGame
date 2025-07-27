@@ -7,10 +7,6 @@
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
 </head>
 <body>
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <div class="loading-text">Loading...</div>
-    </div>
     <div id="audio-popup">
         Enable Audio?
         <div>
@@ -25,11 +21,8 @@
     </div>
     <script src="src/main.js" type="module"></script>
     <script>
-      // Hide loading screen and show audio popup when DOM is ready
+      // Move the audio controls into the #game-wrapper-inner after the canvas is created
       document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('audio-popup').style.display = 'block';
-        // Move the audio controls into the #game-wrapper-inner after the canvas is created
         const wrapper = document.getElementById('game-wrapper');
         const inner = document.createElement('div');
         inner.id = 'game-wrapper-inner';
