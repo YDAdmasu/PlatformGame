@@ -30,6 +30,12 @@ export function showNextLevel(scene) {
   scene.add.text(400, 320, 'Click or Press any key to Continue', {
     fontSize: '28px', fill: 'white', fontFamily: 'sans-serif', align: 'center'
   }).setOrigin(0.5);
-  scene.input.once('pointerdown', () => scene.nextLevel());
-  scene.input.keyboard.once('keydown', () => scene.nextLevel());
+  
+  const nextLevel = () => {
+    scene.level += 1;
+    scene.scene.restart({ level: scene.level });
+  };
+  
+  scene.input.once('pointerdown', nextLevel);
+  scene.input.keyboard.once('keydown', nextLevel);
 }
