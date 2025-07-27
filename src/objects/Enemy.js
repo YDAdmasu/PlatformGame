@@ -1,5 +1,3 @@
-import { getLevelDifficulty } from './PlatformManager.js';
-
 export function spawnEnemies(scene, platforms, level = 1) {
   const group = scene.physics.add.group();
   let positions, speed, chaseRange;

@@ -1,4 +1,4 @@
-export function createPlatforms(scene, level = 1) {
+export function createPlatforms(scene) {
   const platforms = scene.physics.add.staticGroup();
   // Always create the ground
   platforms.create(400, 618, 'ground').setScale(2).refreshBody();
@@ -15,12 +15,4 @@ export function createPlatforms(scene, level = 1) {
     platforms.create(x, config.y, 'ground');
   });
   return platforms;
-}
-
-export function getLevelDifficulty(level) {
-  // For level 2+, no platforms needed
-  let numPlatforms = 0;
-  let minY = 150, maxY = 500, minX = 60, maxX = 740;
-  let minDist = 80 + 10 * Math.min(level, 5);
-  return { numPlatforms, minY, maxY, minX, maxX, minDist };
 }
