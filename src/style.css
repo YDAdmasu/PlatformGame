@@ -1,0 +1,17 @@
+body {
+   margin: 0;
+}
+#audio-popup{
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 24px;
+  font-family: sans-serif;
+  font-size: 18px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  z-index: 10;
+}
