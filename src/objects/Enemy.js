@@ -1,24 +1,25 @@
 export function spawnEnemies(scene, platforms, level = 1) {
   const group = scene.physics.add.group();
-  let positions, speed, chaseRange;
+
+  let positions 
+  let speed
+  let chaseRange;
   
   if (level === 1) {
-    // Level 1: first enemy on first platform, second enemy on third platform
     positions = [
-      { x: 700, y: 450, direction: -1 },  // First enemy on first platform, moving left
-      { x: 500, y: 300, direction: -1 }  // Second enemy on third platform
+      { x: 700, y: 450, direction: -1 }, 
+      { x: 500, y: 300, direction: -1 }  
     ];
     speed = 100;
-    chaseRange = 200;
+    chaseRange = 80;
   } else {
-    // Level 2+: 3 enemies - first platform, third platform, and top platform
     positions = [
-      { x: 700, y: 450, direction: -1 },  // First enemy on first platform
-      { x: 500, y: 300, direction: -1 },  // Second enemy on third platform
-      { x: 400, y: 200, direction: 1 }    // Third enemy on top platform
+      { x: 700, y: 450, direction: -1 },  
+      { x: 500, y: 300, direction: -1 },  
+      { x: 400, y: 200, direction: 1 }    
     ];
     speed = 100 + 20 * (level - 1);
-    chaseRange = 200 + 50 * (level - 1);
+    chaseRange = 80 + 50 * (level - 1);
   }
   
   positions.forEach(pos => {
@@ -47,13 +48,37 @@ export function spawnEnemies(scene, platforms, level = 1) {
   return group;
 }
 
-export function updateEnemyAI(group, player, speed = null, chase = null) {
+export function updateEnemyAI(group, player, speed = null, chase = null,platforms) {
   // Use group.baseSpeed if speed not provided
   speed = speed || group.baseSpeed || 100;
   // Use group.chaseRange if chase not provided
-  chase = chase || group.chaseRange || 120;
-  
+  chase = chase || group.chaseRange || 80;
+
   group.children.iterate(enemy => {
+    // Check if there's a platform ahead and below in the movement direction
+    let hasPlatformAhead = false;
+    const checkX = enemy.x + (enemy.direction * 30); // 30 pixels ahead in movement direction
+    const checkY = enemy.y + (enemy.height / 2) + 10; // Just below the enemy's base
+
+    // Assuming platforms is a group of sprites
+    platforms.getChildren().forEach(platform => {
+      if (
+        platform.body && // Ensure platform has a physics body
+        checkX >= platform.body.left &&
+        checkX <= platform.body.right &&
+        checkY >= platform.body.top &&
+        checkY <= platform.body.bottom
+      ) {
+        hasPlatformAhead = true; // Platform found under the check point
+      }
+    });
+
+    // If no platform ahead and not blocked by walls, reverse direction
+    if (!hasPlatformAhead && !enemy.body.blocked.left && !enemy.body.blocked.right) {
+      enemy.direction = -enemy.direction; // Reverse direction
+      enemy.setVelocityX(speed * enemy.direction); // Update velocity
+    }
+
     // Turn back if hitting a wall
     if (enemy.body.blocked.left) {
       enemy.direction = 1;
@@ -62,14 +87,14 @@ export function updateEnemyAI(group, player, speed = null, chase = null) {
       enemy.direction = -1;
       enemy.setVelocityX(-speed);
     }
-    
+
     // Chase player if close
     const dist = Phaser.Math.Distance.Between(enemy.x, enemy.y, player.x, player.y);
     if (dist < chase) {
       enemy.direction = player.x < enemy.x ? -1 : 1;
       enemy.setVelocityX(speed * enemy.direction);
     }
-    
+
     // Play correct animation
     if (enemy.direction === -1) {
       enemy.anims.play('enemy-left', true);

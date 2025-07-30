@@ -29,8 +29,25 @@ export default class GameScene extends Phaser.Scene {
     this.player = new Player(this);
     this.platforms = createPlatforms(this);
     this.enemies = spawnEnemies(this, this.platforms, this.level);
-    this.stars = this.physics.add.group({ key: 'star', repeat: 11, setXY: { x: 12, y: 0, stepX: 70 } });
-    this.stars.children.iterate(star => star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)));
+    this.stars = this.physics.add.group();
+    
+    // Generate stars randomly on platforms
+    this.platforms.children.iterate(platform => {
+      if (Math.random() < 0.8) { // 80% chance
+        const star = this.stars.create(platform.x, platform.y - 30, 'star');
+        star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        // Disable gravity for stars so they don't fall
+        star.body.setGravityY(0);
+      }
+    });
+    const fixedStars = this.physics.add.group({ key: 'star', repeat: 8, setXY: { x: 12, y: 0, stepX: 70 } });
+    fixedStars.children.iterate(star => {
+      star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      // Disable gravity for fixed stars too
+      star.body.setGravityY(0);
+      // Add them to the main stars group
+      this.stars.add(star);
+    });
     this.debrisGroup = this.add.group();
     this.score = 0;
     this.scoreText = setupHUD(this);
@@ -61,8 +78,14 @@ export default class GameScene extends Phaser.Scene {
           onComplete: () => debris.destroy()
         });
       }
-      // Check for level completion
-      if (this.stars.countActive(true) === 0) {
+      // Check for level completion - more robust check
+      const activeStars = this.stars.countActive(true);
+      const totalStars = this.stars.getChildren().length;
+      const collectedStars = totalStars - activeStars;
+      console.log('Active stars remaining:', activeStars, 'Total stars:', totalStars, 'Collected:', collectedStars);
+      
+      if (activeStars - 1 === 0 && totalStars > 0) {
+        console.log('Level complete!');
         showNextLevel(this);
       }
     });
@@ -131,6 +154,6 @@ export default class GameScene extends Phaser.Scene {
   update() {
     handleMovement(this.player.sprite, this.input.keyboard.createCursorKeys());
     handleJump(this.player.sprite);
-    updateEnemyAI(this.enemies, this.player.sprite, this.enemies.baseSpeed, this.enemies.chaseRange);
+    updateEnemyAI(this.enemies, this.player.sprite, this.enemies.baseSpeed, this.enemies.chaseRange,this.platforms);
   }
 }
