@@ -27,7 +27,7 @@ export function showNextLevel(scene) {
     fontSize: '48px', fill: '#00ff00', fontStyle: 'bold', align: 'center'
   }).setOrigin(0.5);
   // Centered instructions in white below
-  scene.add.text(400, 320, 'Click or Press any key to Continue', {
+  scene.add.text(400, 320, 'Click or Press any key to Continue to the \n Next level', {
     fontSize: '28px', fill: 'white', align: 'center'
   }).setOrigin(0.5);
   
